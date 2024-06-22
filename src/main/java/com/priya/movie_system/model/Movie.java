@@ -3,6 +3,8 @@ package com.priya.movie_system.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,7 @@ public class Movie {
     @OneToOne(mappedBy = "movie", cascade = CascadeType.ALL)
     private Director director;
 
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private Set<Actor> actors = new HashSet<>();
 
@@ -33,6 +36,23 @@ public class Movie {
     @JoinTable(name = "movie_production_crew", joinColumns = { @JoinColumn(name = "movie_id") }, inverseJoinColumns = {
             @JoinColumn(name = "production_crew_id") })
     private Set<ProductionCrew> productionCrews = new HashSet<>();
+
+    public Movie() {
+    }
+
+    public Movie(Long id, String title, int releaseYear, String genre, Director director, Set<Actor> actors, Set<ProductionCrew> productionCrews) {
+        this.id = id;
+        this.title = title;
+        this.releaseYear = releaseYear;
+        this.genre = genre;
+        this.director = director;
+        this.actors = actors;
+        this.productionCrews = productionCrews;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;
@@ -80,5 +100,15 @@ public class Movie {
 
     public void setProductionCrews(Set<ProductionCrew> productionCrews) {
         this.productionCrews = productionCrews;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", releaseYear=" + releaseYear +
+                ", genre='" + genre + '\'' +
+                '}';
     }
 }

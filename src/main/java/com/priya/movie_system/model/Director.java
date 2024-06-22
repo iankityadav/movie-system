@@ -1,5 +1,7 @@
 package com.priya.movie_system.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,9 +17,20 @@ public class Director {
     private String name;
     private String biography;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "movie_id")
     private Movie movie;
+
+    public Director(Long id, String name, String biography, Movie movie) {
+        this.id = id;
+        this.name = name;
+        this.biography = biography;
+        this.movie = movie;
+    }
+
+    public Director() {
+    }
 
     public String getName() {
         return name;
@@ -41,5 +54,15 @@ public class Director {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+    }
+
+    @Override
+    public String toString() {
+        return "Director{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", biography='" + biography + '\'' +
+                ", movie=" + movie +
+                '}';
     }
 }

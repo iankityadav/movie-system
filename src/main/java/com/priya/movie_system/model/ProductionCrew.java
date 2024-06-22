@@ -3,6 +3,8 @@ package com.priya.movie_system.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,8 +19,19 @@ public class ProductionCrew {
     private String name;
     private String role;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "productionCrews")
     private Set<Movie> movies = new HashSet<>();
+
+    public ProductionCrew(Long id, String name, String role, Set<Movie> movies) {
+        this.id = id;
+        this.name = name;
+        this.role = role;
+        this.movies = movies;
+    }
+
+    public ProductionCrew() {
+    }
 
     public String getName() {
         return name;
@@ -42,5 +55,15 @@ public class ProductionCrew {
 
     public void setMovies(Set<Movie> movies) {
         this.movies = movies;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductionCrew{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", role='" + role + '\'' +
+                ", movies=" + movies +
+                '}';
     }
 }
