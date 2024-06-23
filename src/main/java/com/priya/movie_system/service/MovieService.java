@@ -12,17 +12,17 @@ public interface MovieService {
 
     public Movie getMovieById(Long id);
 
-    public Movie updateMovieById(Long id);
+    public Movie updateMovieById(Long id, Movie movie);
 
     public void deleteMovieById(Long id);
 
     public Director getDirectorByMovie(Long movieId);
 
-    public Actor addActorToMovie(Long movieId);
+    public List<Actor> addActorToMovie(Long movieId, Actor actor);
 
     public List<Actor> getAllActors(Long movieId);
 
-    public ProductionCrew addCrewToMovie(Long movieId);
+    public List<ProductionCrew> addCrewToMovie(Long movieId, ProductionCrew crew);
 
     public List<ProductionCrew> getAllProductionCrews(Long movieId);
 }
