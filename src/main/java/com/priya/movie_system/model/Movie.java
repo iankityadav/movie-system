@@ -25,11 +25,11 @@ public class Movie {
     private int releaseYear;
     private String genre;
 
-    @OneToOne(mappedBy = "movie", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Director director;
 
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Actor> actors = new HashSet<>();
 
     @ManyToMany(cascade = { CascadeType.ALL })
@@ -52,6 +52,10 @@ public class Movie {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
