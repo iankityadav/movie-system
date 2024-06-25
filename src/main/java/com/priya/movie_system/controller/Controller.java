@@ -42,7 +42,6 @@ public class Controller {
         return new ResponseEntity<>(movieService.updateMovieById(id, movie), HttpStatus.OK);
     }
 
-    @RolesAllowed("ADMIN")
     @DeleteMapping("/movies/{id}")
     public ResponseEntity<String> deleteMovie(@PathVariable Long id) {
         movieService.deleteMovieById(id);

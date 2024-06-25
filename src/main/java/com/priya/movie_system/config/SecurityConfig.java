@@ -3,13 +3,16 @@ package com.priya.movie_system.config;
 import com.priya.movie_system.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -32,7 +35,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth-> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**","/swagger-ui.html","/swagger-resources/**","/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE).hasAuthority("ADMIN")
                         .anyRequest().authenticated()
+                ).exceptionHandling(configure -> configure.authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(403);
+                            response.getWriter().write("Access Denied");
+                        })
                 )
                 .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

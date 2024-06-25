@@ -53,7 +53,9 @@ public class AuthService {
                 request.getUsername(),
                 request.getPassword()));
         Users user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().name()));
+        System.out.println("authorities = " + authorities);
+        var jwtToken = jwtService.generateToken(new User(user.getUsername(), user.getPassword(),user.getAuthorities()));
         return new AuthenticationResponse(jwtToken);
     }
 }
