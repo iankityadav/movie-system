@@ -1,10 +1,15 @@
 package com.priya.movie_system.controller;
 
+import com.priya.movie_system.dto.AuthenticationRequest;
+import com.priya.movie_system.dto.AuthenticationResponse;
+import com.priya.movie_system.dto.RegisterRequest;
 import com.priya.movie_system.model.Actor;
 import com.priya.movie_system.model.Director;
 import com.priya.movie_system.model.Movie;
 import com.priya.movie_system.model.ProductionCrew;
+import com.priya.movie_system.service.AuthService;
 import com.priya.movie_system.service.MovieService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +23,9 @@ public class Controller {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private AuthService authService;
 
     @PostMapping("/movies")
     public ResponseEntity<Movie> createMovie(@RequestBody Movie movie) {
@@ -34,6 +42,7 @@ public class Controller {
         return new ResponseEntity<>(movieService.updateMovieById(id, movie), HttpStatus.OK);
     }
 
+    @RolesAllowed("ADMIN")
     @DeleteMapping("/movies/{id}")
     public ResponseEntity<String> deleteMovie(@PathVariable Long id) {
         movieService.deleteMovieById(id);
@@ -63,6 +72,16 @@ public class Controller {
     @PostMapping("/movies/{movieId}/crews")
     public ResponseEntity<List<ProductionCrew>> addCrew(@PathVariable Long movieId, @RequestBody ProductionCrew crew) {
         return new ResponseEntity<>(movieService.addCrewToMovie(movieId, crew), HttpStatus.OK);
+    }
+
+    @PostMapping("/auth/sign-up")
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
+        return ResponseEntity.ok(authService.register(request));
+    }
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request){
+        return ResponseEntity.ok(authService.authenticate(request));
     }
 
 }
